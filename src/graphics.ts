@@ -3,6 +3,8 @@ export class Graphics {
     private ctx: CanvasRenderingContext2D | null;
     private canvasWidth: number;
     private canvasHeight: number;
+
+    private readonly globalFont: string = 'Helvetica';
     
     constructor(canvas: HTMLCanvasElement, width: number, height: number) {
         this.canvas = canvas;
@@ -25,39 +27,74 @@ export class Graphics {
         this.ctx!.drawImage(image, x, y, width, height);
     }
 
-    public drawDialogBox(border: string, color: string, text: string, image: HTMLImageElement) {
-        const dialogHeight = 100;
-        const imageHeight = 100; // Adjust this if you want the image to be larger or smaller
-        const dialogY = this.canvasHeight - dialogHeight; // Position for the dialog box
-        const imageY = dialogY - imageHeight; // Position for the image above the dialog box
-        const borderRadius = 20; // Adjust for desired roundness
-    
-        // Draw the rounded rectangle for the dialog box
+    public drawImageColoredSilhouette(image: HTMLImageElement, x: number, y: number, width: number, height: number, color: string) {
+        this.ctx!.drawImage(image, x, y, width, height);
+
+        this.ctx!.globalCompositeOperation = 'source-atop';
+
         this.ctx!.fillStyle = color;
-        this.ctx!.beginPath();
-        this.ctx!.moveTo(0 + borderRadius, dialogY);
-        this.ctx!.lineTo(this.canvasWidth - borderRadius, dialogY);
-        this.ctx!.arcTo(this.canvasWidth, dialogY, this.canvasWidth, dialogY + dialogHeight, borderRadius);
-        this.ctx!.lineTo(this.canvasWidth, dialogY + dialogHeight);
-        this.ctx!.arcTo(this.canvasWidth, dialogY + dialogHeight, 0, dialogY + dialogHeight, borderRadius);
-        this.ctx!.lineTo(0, dialogY + dialogHeight);
-        this.ctx!.arcTo(0, dialogY + dialogHeight, 0, dialogY, borderRadius);
-        this.ctx!.lineTo(0, dialogY);
-        this.ctx!.arcTo(0, dialogY, this.canvasWidth - borderRadius, dialogY, borderRadius);
-        this.ctx!.closePath();
-        this.ctx!.fill();
-    
-        // Draw the border
-        this.ctx!.strokeStyle = border;
-        this.ctx!.stroke();
-    
-        // Draw the text
-        this.ctx!.fillStyle = 'black';
-        this.ctx!.font = '16px Arial';
-        this.ctx!.fillText(text, 10, dialogY + 30); // Adjust Y to center text vertically
-    
-        // Draw the image above the dialog box
-        this.ctx!.drawImage(image, (this.canvasWidth - image.width) / 2, imageY, image.width, image.height); // Center the image above the box
+        this.ctx!.fillRect(x, y, width, height);
+
+        this.ctx!.globalCompositeOperation = 'source-over';
+
+        this.ctx!.filter = 'none';
     }
     
+
+    public drawDialogBox(
+        border: string,
+        color: string,
+        text: string,
+        textColor: string,
+        image: HTMLImageElement,
+        characterName: string,
+        textShadow: string,
+        silhouetteColor: string
+    ) {
+        const cornerRadius = 15;
+        const boxWidth = this.canvasWidth;
+        const boxHeight = 100;
+
+        this.ctx!.beginPath();
+        this.ctx!.moveTo(cornerRadius, this.canvasHeight - boxHeight);
+        this.ctx!.lineTo(boxWidth - cornerRadius, this.canvasHeight - boxHeight);
+        this.ctx!.arcTo(boxWidth, this.canvasHeight - boxHeight, boxWidth, this.canvasHeight - boxHeight + cornerRadius, cornerRadius);
+        this.ctx!.lineTo(boxWidth, this.canvasHeight);
+        this.ctx!.arcTo(boxWidth, this.canvasHeight, boxWidth - cornerRadius, this.canvasHeight, cornerRadius);
+        this.ctx!.lineTo(cornerRadius, this.canvasHeight);
+        this.ctx!.arcTo(0, this.canvasHeight, 0, this.canvasHeight - boxHeight + cornerRadius, cornerRadius);
+        this.ctx!.lineTo(0, this.canvasHeight - boxHeight);
+        this.ctx!.arcTo(0, this.canvasHeight - boxHeight, cornerRadius, this.canvasHeight - boxHeight, cornerRadius);
+        this.ctx!.closePath();
+
+        this.ctx!.shadowColor = 'rgba(0, 0, 0, 0.5)';
+        this.ctx!.shadowBlur = 10;
+        this.ctx!.shadowOffsetX = 5;
+        this.ctx!.shadowOffsetY = 5;
+    
+        this.ctx!.fillStyle = color;
+        this.ctx!.fill();
+
+        this.ctx!.shadowColor = 'transparent'; 
+        this.ctx!.strokeStyle = border;
+        this.ctx!.lineWidth = 2;
+        this.ctx!.stroke();
+
+        this.ctx!.font = `20px ${this.globalFont}`;
+        this.ctx!.fillStyle = textColor;
+        this.ctx!.textBaseline = 'middle';
+        this.ctx!.textAlign = 'left';
+    
+        this.ctx!.shadowColor = textShadow;
+        this.ctx!.shadowBlur = 5;
+        this.ctx!.shadowOffsetX = 2;
+        this.ctx!.shadowOffsetY = 2;
+
+        this.ctx!.fillText(`${characterName}: ${text}`, 10, this.canvasHeight - 50);
+
+        this.ctx!.shadowColor = 'transparent';
+
+        this.drawImageColoredSilhouette(image, this.canvasWidth - 390, this.canvasHeight - 500, 400, 400, silhouetteColor);
+        this.drawImage(image, this.canvasWidth - 400, this.canvasHeight - 500, 400, 400);
+    }    
 }

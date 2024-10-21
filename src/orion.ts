@@ -38,7 +38,16 @@ function init() {
     loadAssets(orionAssets, orionPublicTransit.debug).then(() => {
         orionGraphics.init();
 
-        orionGraphics.drawDialogBox('white', 'black', 'Hello, World!', orionAssets[0].image!);
+        orionGraphics.drawDialogBox(
+            'black',
+            'white',
+            'This is a test dialog box.',
+            'black',
+            assets.image.icon[0].image!,
+            'J.Z.',
+            '0px 0px 5px white',
+            'orange'
+        )
     }).catch(error => {
         console.error("Error loading assets:", error);
     });
