@@ -13,7 +13,7 @@
     "generate-web": "node ./scripts/generate-web.js",
     "copy-assets": "cp -R ./assets dist/",
     "build": "npm run clean && npm run build-ts && npm run mkdir-js && npm run move-js && npm run mkdir-css && npm run copy-assets && npm run generate-web",
-    "start": "http-server -p 8080 dist",
+    "start": "http-server -p 8080 dist --cors",
     "dev": "npm run build && npm run start"
   },
   "author": "colack",
