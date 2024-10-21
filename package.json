@@ -4,12 +4,24 @@
   "description": "game",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "rm -rf dist",
+    "prettier": "prettier --write ./src/**/*.ts",
+    "build-ts": "npx tsc",
+    "mkdir-js": "mkdir -p dist/js",
+    "move-js": "node ./scripts/move-js.js",
+    "mkdir-css": "mkdir -p dist/css",
+    "generate-web": "node ./scripts/generate-web.js",
+    "copy-assets": "cp -R ./assets dist/",
+    "build": "npm run clean && npm run build-ts && npm run mkdir-js && npm run move-js && npm run mkdir-css && npm run copy-assets && npm run generate-web",
+    "start": "http-server -p 8080 dist",
+    "dev": "npm run build && npm run start"
   },
   "author": "colack",
   "license": "GPL-3.0-only",
   "devDependencies": {
     "@types/node": "^22.7.7",
+    "fs-extra": "^11.2.0",
+    "http-server": "^14.1.1",
     "prettier": "^3.3.3",
     "typescript": "^5.6.3"
   }
