@@ -1,5 +1,11 @@
 export const assets: {
     image: {
+        app: {
+            name: string;
+            src: string;
+            loaded?: boolean;
+            image?: HTMLImageElement;
+        }[];
         icon: {
             name: string;
             src: string;
@@ -9,6 +15,9 @@ export const assets: {
     };
 } = {
     image: {
+        app: [
+            { name: 'trueends', src: 'assets/image/app/trueends.png' }
+        ],
         icon: [
             { name: 'jzangry', src: 'assets/image/icon/jz/angry.png' },
             { name: 'jzblushing', src: 'assets/image/icon/jz/blushing.png' },
