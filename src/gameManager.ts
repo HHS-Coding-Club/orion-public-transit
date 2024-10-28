@@ -11,4 +11,8 @@ export class GameManager {
     public renameTitle(title: string) {
         this.document.title = title;
     }
+
+    public init() {
+        
+    }
 }

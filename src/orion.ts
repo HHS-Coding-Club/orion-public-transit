@@ -27,27 +27,19 @@ const orionGraphics: Graphics = new Graphics(canvas, orionPublicTransit.canWidth
 const gameManager: GameManager = new GameManager(document);
 
 function init() {
-    gameManager.renameTitle(orionPublicTransit.name);
-
     for (const category in assets.image.icon) {
         orionAssets = orionAssets.concat(assets.image.icon[category]);
     }
 
-    console.log(`Initializing ${orionPublicTransit.name} v${orionPublicTransit.version} by ${orionPublicTransit.author}`);
+    for (const category in assets.image.npc) {
+        orionAssets = orionAssets.concat(assets.image.npc[category]);
+    }
 
     loadAssets(orionAssets, orionPublicTransit.debug).then(() => {
-        orionGraphics.init();
+        gameManager.renameTitle(orionPublicTransit.name);
 
-        orionGraphics.drawDialogBox(
-            'black',
-            'white',
-            'This is a test dialog box.',
-            'black',
-            assets.image.icon[0].image!,
-            'J.Z.',
-            '0px 0px 5px white',
-            'orange'
-        )
+        orionGraphics.init();
+        gameManager.init();
     }).catch(error => {
         console.error("Error loading assets:", error);
     });
